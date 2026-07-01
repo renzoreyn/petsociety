@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pet Society: Revival Project</title>
+<meta name="description" content="A fan-made revival of Pet Society, rebuilt natively for Android. No Flash, no plugins.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --blue: #25a8ec;
+    --blue-dark: #1c8ec9;
+    --pink: #ea659a;
+    --ink: #1e1e1e;
+    --body-text: #4a4a4a;
+    --muted: #7a7a7a;
+    --bg-light: #f7f7f7;
+    --bg-card: #eeeeee;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--body-text);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  ul { list-style: none; }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  h1, h2, h3, h4 {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ---------- buttons ---------- */
+
+  .btn {
+    display: inline-block;
+    background-color: var(--pink);
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 30px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn:hover { background-color: var(--blue); }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.6);
+    border-radius: 25px;
+    padding: 0 26px;
+    height: 50px;
+    line-height: 46px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+  /* ---------- header ---------- */
+
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 0;
+    transition: all 0.4s ease;
+  }
+
+  .site-header.scrolled {
+    background-color: var(--blue);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.15);
+    padding: 12px 0;
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .logo-mark .paw {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 6px;
+  }
+
+  .nav-links a {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 20px;
+    transition: background 0.3s ease;
+  }
+
+  .nav-links a:hover { background: rgba(255,255,255,0.15); }
+
+  .nav-links a.nav-cta {
+    background-color: var(--pink);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+  }
+
+  .nav-links a.nav-cta:hover { background-color: #d94f87; }
+
+  .menu-trigger { display: none; }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    position: relative;
+    background: linear-gradient(180deg, #1c8ec9 0%, var(--blue) 45%, #6cc4f0 100%);
+    border-radius: 0 0 90px 90px;
+    padding: 190px 0 100px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('assets/bg-pattern.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+
+  .hero h1 {
+    color: #fff;
+    font-size: 46px;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    color: #fff;
+    font-style: normal;
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero h1 em::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 4px;
+    height: 14px;
+    background: var(--pink);
+    z-index: -1;
+    border-radius: 8px;
+    opacity: 0.8;
+  }
+
+  .hero p {
+    color: rgba(255,255,255,0.92);
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 34px;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* hero visual: original composition, not the original game's logo art */
+
+  .hero-visual {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .hero-visual .cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+  }
+
+  .badge-card {
+    position: relative;
+    background: #fff;
+    border-radius: 28px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(15, 60, 90, 0.25);
+    z-index: 2;
+  }
+
+  .badge-card .wordmark {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-card .wordmark .line1 { color: var(--blue); display: block; }
+  .badge-card .wordmark .line2 {
+    display: inline-block;
+    color: #fff;
+    background: var(--pink);
+    padding: 4px 18px;
+    border-radius: 40px;
+    margin-top: 6px;
+    font-size: 26px;
+  }
+
+  .badge-card .tagline {
+    margin-top: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+
+  .floaty {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    animation: bob 4s ease-in-out infinite;
+  }
+
+  .floaty img { width: 30px; height: 30px; object-fit: contain; }
+  .floaty.f1 { top: -18px; left: -10px; animation-delay: 0s; }
+  .floaty.f2 { bottom: 10px; right: -20px; animation-delay: 1.2s; }
+  .floaty.f3 { bottom: -22px; left: 30px; animation-delay: 2.1s; width: 44px; height: 44px; }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floaty { animation: none; }
+  }
+
+  /* ---------- stat cards (overlap hero) ---------- */
+
+  .stats {
+    margin-top: -70px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 30px 20px;
+    text-align: center;
+    transition: transform 0.25s ease;
+  }
+
+  .stat-card:hover { transform: translateY(-6px); }
+
+  .stat-card img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    margin: 0 auto 16px;
+  }
+
+  .stat-card h4 {
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 8px;
+  }
+
+  .stat-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* ---------- section shell ---------- */
+
+  .section {
+    padding: 110px 0;
+  }
+
+  .section-tight { padding: 70px 0; }
+
+  .eyebrow {
+    color: var(--pink);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .section-heading h2 {
+    font-size: 32px;
+    line-height: 1.3;
+  }
+
+  .section-heading h2 em {
+    color: var(--blue);
+    font-style: normal;
+  }
+
+  .section-heading p.lead {
+    color: var(--muted);
+    font-size: 15px;
+    margin-top: 14px;
+    max-width: 560px;
+  }
+
+  .center { text-align: center; margin-left: auto; margin-right: auto; }
+
+  /* ---------- about / two-panel ---------- */
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .panel {
+    background: var(--bg-light);
+    border-radius: 25px;
+    padding: 50px 44px;
+  }
+
+  .panel p {
+    font-size: 14.5px;
+    line-height: 1.85;
+    margin: 18px 0 26px;
+  }
+
+  .panel a.link-cta {
+    color: var(--blue);
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .panel a.link-cta:hover { color: var(--pink); }
+
+  /* ---------- progress / feature status ---------- */
+
+  .progress-wrap {
+    background: var(--bg-light);
+    border-radius: 30px;
+    padding: 60px;
+  }
+
+  .progress-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .progress-col h3 {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .dot-live { background: var(--blue); }
+  .dot-progress { background: var(--pink); }
+
+  .feature-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #e3e3e3;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .feature-list li:last-child { border-bottom: none; }
+
+  .feature-list .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    height: fit-content;
+  }
+
+  .tag-live { background: rgba(37,168,236,0.12); color: var(--blue-dark); }
+  .tag-progress { background: rgba(234,101,154,0.12); color: var(--pink); }
+
+  /* ---------- credit strip ---------- */
+
+  .credit-strip {
+    background: #fff;
+    border: 1px dashed #d8d8d8;
+    border-radius: 20px;
+    padding: 26px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  .credit-strip p { font-size: 13.5px; color: var(--muted); }
+  .credit-strip a { color: var(--blue); font-weight: 600; }
+
+  /* ---------- download CTA ---------- */
+
+  .download-cta {
+    background: linear-gradient(135deg, var(--blue) 0%, #1c8ec9 100%);
+    border-radius: 40px;
+    padding: 70px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .download-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('assets/bg-pattern.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+  }
+
+  .download-cta > * { position: relative; z-index: 1; }
+
+  .download-cta h2 { color: #fff; font-size: 30px; margin-bottom: 14px; }
+  .download-cta p { color: rgba(255,255,255,0.9); font-size: 15px; max-width: 460px; margin: 0 auto 32px; }
+
+  .download-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    color: var(--ink);
+    border-radius: 16px;
+    padding: 12px 26px;
+    text-align: left;
+    transition: transform 0.25s ease;
+  }
+
+  .download-btn:hover { transform: translateY(-3px); }
+
+  .download-btn.disabled {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    cursor: default;
+  }
+
+  .download-btn.disabled:hover { transform: none; }
+
+  .download-btn .dl-icon { font-size: 26px; }
+  .download-btn .dl-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+  .download-btn .dl-main { font-size: 15px; font-weight: 700; }
+
+  /* ---------- footer ---------- */
+
+  footer {
+    background: linear-gradient(180deg, var(--blue) 0%, #1c8ec9 100%);
+    border-radius: 90px 90px 0 0;
+    margin-top: 130px;
+    padding: 60px 0 40px;
+    text-align: center;
+  }
+
+  footer .foot-logo {
+    color: #fff;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  footer p {
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    line-height: 1.8;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  footer a { color: #fff; font-weight: 600; }
+  footer a:hover { opacity: 0.8; }
+
+  footer .foot-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 18px 0;
+    flex-wrap: wrap;
+  }
+
+  footer .foot-links a { font-size: 13px; font-weight: 500; opacity: 0.9; }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { margin-top: 40px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .progress-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .menu-trigger {
+      display: block;
+      color: #fff;
+      font-size: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero { padding: 160px 0 80px; border-radius: 0 0 50px 50px; }
+    .hero h1 { font-size: 32px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .panel { padding: 36px 26px; }
+    .progress-wrap { padding: 36px 22px; }
+    .download-cta { padding: 50px 26px; }
+    footer { border-radius: 50px 50px 0 0; }
+  }
+
+  .icon-inline {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    vertical-align: -1px;
+    margin-left: 4px;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--pink);
+    outline-offset: 2px;
+  }
+
+</style>
+</head>
+<body>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-inner">
+      <a href="#" class="logo-mark">
+        <span class="paw">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#25a8ec">
+            <circle cx="7" cy="8" r="2.2"/>
+            <circle cx="12" cy="5.5" r="2.2"/>
+            <circle cx="17" cy="8" r="2.2"/>
+            <path d="M12 11c-3.3 0-6 2.2-6 5.1 0 1.7 1.4 3.1 3.1 3.1.9 0 1.5-.3 2.1-.6.5-.3.9-.5 1.5-.5s1 .2 1.5.5c.6.3 1.2.6 2.1.6 1.7 0 3.1-1.4 3.1-3.1C21.3 13.2 18.6 11 15.3 11z" transform="translate(-3.3 0)"/>
+          </svg>
+        </span>
+        Pet Society
+      </a>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#progress">Progress</a>
+        <a href="#faq">FAQ</a>
+        <a href="#download" class="nav-cta">Download</a>
+      </nav>
+      <button class="menu-trigger" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <span class="hero-eyebrow">A fan-made revival</span>
+        <h1>Pet Society, rebuilt <em>natively</em></h1>
+        <p>Pet Society shut down in 2013. This is a from-scratch rebuild of the client and server, same items and same rooms, without relying on Flash or an emulator layer to keep it running. Currently in active development.</p>
+        <div class="hero-buttons">
+          <a href="#download" class="btn">Get the app</a>
+          <a href="#progress" class="btn-outline">See what's working<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="badge-card">
+          <div class="wordmark">
+            <span class="line1">Pet</span>
+            <span class="line2">Society</span>
+          </div>
+          <div class="tagline">Revival Project</div>
+        </div>
+        <div class="floaty f1"><img src="assets/icon-heart.png" alt=""></div>
+        <div class="floaty f2"><img src="assets/icon-pets.png" alt=""></div>
+        <div class="floaty f3"><img src="assets/icon-homes.png" alt=""></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container stats">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <img src="assets/icon-pets.png" alt="">
+        <h4>~25,300 Assets</h4>
+        <p>Original items recovered and catalogued from the archived game.</p>
+      </div>
+      <div class="stat-card">
+        <img src="assets/icon-heart.png" alt="">
+        <h4>33% Server Parity</h4>
+        <p>Core actions from the original backend implemented and tested.</p>
+      </div>
+      <div class="stat-card">
+        <img src="assets/icon-homes.png" alt="">
+        <h4>Layer-Editable Items</h4>
+        <p>Assets keep their original shape layers, not flattened images.</p>
+      </div>
+      <div class="stat-card">
+        <img src="assets/icon-diary.png" alt="">
+        <h4>Android First</h4>
+        <p>Direct APK download, no Flash, no browser plugin required.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="panel">
+          <span class="eyebrow">The Original</span>
+          <h2>What <em>Pet Society</em> was</h2>
+          <p>Pet Society was a Facebook game by Playfish where you adopted a pet, decorated its home, and visited friends' rooms. It ran from 2008 to 2013, then the servers went dark, like most Facebook-era games did.</p>
+          <a href="https://en.wikipedia.org/wiki/Pet_Society" target="_blank" class="link-cta">Read the history<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
+        </div>
+        <div class="panel">
+          <span class="eyebrow">This Project</span>
+          <h2>Why we're <em>rebuilding</em> it</h2>
+          <p>The original client depended on Adobe Flash, which no longer runs in modern browsers. Instead of patching around that with an emulator layer, this rebuilds the client natively. Same items, same rooms, running on a real backend instead of pretending to.</p>
+          <a href="#progress" class="link-cta">See current status<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tight" id="progress">
+    <div class="container">
+      <div class="section-heading center" style="max-width:640px;">
+        <span class="eyebrow">Status</span>
+        <h2>What's actually <em>working</em> right now</h2>
+        <p class="lead center">No inflated claims. This is the real state of the project as of today.</p>
+      </div>
+
+      <div class="progress-wrap" style="margin-top:50px;">
+        <div class="progress-grid">
+          <div class="progress-col">
+            <h3><span class="dot dot-live"></span> Working</h3>
+            <ul class="feature-list">
+              <li>Asset extraction pipeline <span class="tag tag-live">Live</span></li>
+              <li>Original item names recovered (25,291 assets) <span class="tag tag-live">Live</span></li>
+              <li>Custom editable asset format <span class="tag tag-live">Live</span></li>
+              <li>Server protocol fully mapped <span class="tag tag-live">Live</span></li>
+              <li>Profile save/load <span class="tag tag-live">Live</span></li>
+              <li>Purchases, cooking, fishing, digging, quests <span class="tag tag-live">Live</span></li>
+            </ul>
+          </div>
+          <div class="progress-col">
+            <h3><span class="dot dot-progress"></span> In progress</h3>
+            <ul class="feature-list">
+              <li>Remaining server actions (~63 of 94) <span class="tag tag-progress">Building</span></li>
+              <li>Room and world rendering <span class="tag tag-progress">Building</span></li>
+              <li>Native Android client <span class="tag tag-progress">Building</span></li>
+              <li>Currency &amp; monetization system <span class="tag tag-progress">Planned</span></li>
+              <li>iOS build <span class="tag tag-progress">Planned</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="credit-strip">
+          <p>Server built on <strong>mascotsociety</strong>, an independent Pet Society backend reimplementation.</p>
+          <a href="https://github.com/DexterX12/mascotsociety" target="_blank">View the repo<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="download">
+    <div class="container">
+      <div class="download-cta">
+        <h2>Not playable yet. You can still follow progress here.</h2>
+        <p>The Android APK isn't ready. When it is, it'll be a direct download here. No Play Store for the first release.</p>
+        <div class="download-buttons">
+          <span class="download-btn disabled">
+            <span class="dl-icon">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24c-1.44-.65-3.06-1.02-4.77-1.02s-3.33.37-4.77 1.02L5.05 5.67c-.19-.28-.55-.37-.83-.22-.3.16-.42.54-.26.85L5.8 9.48C3.15 11.1 1.4 13.87 1.4 17h21.2c0-3.13-1.75-5.9-5-7.52zM7 14.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm10 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+              </svg>
+            </span>
+            <span>
+              <span class="dl-label">Coming soon</span>
+              <span class="dl-main">Android APK</span>
+            </span>
+          </span>
+          <span class="download-btn disabled">
+            <span class="dl-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                <path d="M16.36 1.43c.09 1.02-.29 2.02-.94 2.75-.67.75-1.75 1.33-2.8 1.25-.11-.99.34-2.03.96-2.72.68-.76 1.85-1.32 2.78-1.28zM19.5 17.3c-.44 1.02-.65 1.47-1.22 2.38-.79 1.27-1.9 2.85-3.28 2.86-1.22.02-1.54-.8-3.2-.79-1.66.01-2.01.8-3.23.79-1.38-.02-2.43-1.44-3.22-2.71-2.21-3.55-2.44-7.72-1.08-9.94.97-1.58 2.5-2.5 3.94-2.5 1.47 0 2.39.81 3.61.81 1.18 0 1.9-.81 3.61-.81 1.28 0 2.64.7 3.6 1.91-3.17 1.74-2.65 6.27.07 7.4z"/>
+              </svg>
+            </span>
+            <span>
+              <span class="dl-label">Planned later</span>
+              <span class="dl-main">iOS</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" id="faq">
+    <div class="container">
+      <div class="section-heading center" style="max-width:600px;">
+        <span class="eyebrow">FAQ</span>
+        <h2>A few things people <em>ask</em></h2>
+      </div>
+      <div class="about-grid" style="margin-top:50px;">
+        <div class="panel">
+          <h4 style="font-size:16px; margin-bottom:10px;">Is this official?</h4>
+          <p style="margin:0; font-size:14px;">No. This is an unofficial fan project. It isn't affiliated with Playfish or Electronic Arts, who own the original game and its assets.</p>
+        </div>
+        <div class="panel">
+          <h4 style="font-size:16px; margin-bottom:10px;">Why Android first?</h4>
+          <p style="margin:0; font-size:14px;">iOS builds need Mac hardware and a paid developer account. Android sideloading has neither requirement, so it's the faster path to something people can actually install.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot-logo">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff" style="vertical-align:-4px; margin-right:6px;">
+          <circle cx="7" cy="8" r="2.2"/>
+          <circle cx="12" cy="5.5" r="2.2"/>
+          <circle cx="17" cy="8" r="2.2"/>
+          <path d="M12 11c-3.3 0-6 2.2-6 5.1 0 1.7 1.4 3.1 3.1 3.1.9 0 1.5-.3 2.1-.6.5-.3.9-.5 1.5-.5s1 .2 1.5.5c.6.3 1.2.6 2.1.6 1.7 0 3.1-1.4 3.1-3.1C21.3 13.2 18.6 11 15.3 11z" transform="translate(-3.3 0)"/>
+        </svg>
+        Pet Society
+      </div>
+      <p style="margin-bottom: 8px;">Built by <a href="https://renzoreyn.dev" target="_blank">Ren</a></p>
+      <div class="foot-links">
+        <a href="#about">About</a>
+        <a href="#progress">Progress</a>
+        <a href="https://github.com/DexterX12/mascotsociety" target="_blank">Server repo</a>
+      </div>
+      <p>This is a fan-made project and is not affiliated with the original Pet Society, Playfish, or Electronic Arts. Original game and assets belong to their respective owners.</p>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
+
+</body>
+</html>
